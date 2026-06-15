@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Builder</title>
+</head>
+<body style="
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+">
+
+<div style="
+    background:white;
+    padding:30px;
+    width:450px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+">
+
+    <h1 style="text-align:center;">AI Resume Builder</h1>
+
+    <input
+        id="name"
+        type="text"
+        placeholder="Enter Name"
+        style="width:95%;padding:12px;margin-top:10px;border-radius:10px;border:1px solid #ddd;"
+    >
+
+    <input
+        id="role"
+        type="text"
+        placeholder="Enter Job Role"
+        style="width:95%;padding:12px;margin-top:10px;border-radius:10px;border:1px solid #ddd;"
+    >
+
+    <textarea
+        id="skills"
+        placeholder="Enter Skills (Python, FastAPI, React)"
+        style="width:95%;height:80px;padding:12px;margin-top:10px;border-radius:10px;border:1px solid #ddd;"
+    ></textarea>
+
+    <button
+        onclick="generateResume()"
+        style="
+            width:100%;
+            padding:12px;
+            margin-top:15px;
+            border:none;
+            border-radius:10px;
+            background:#4f46e5;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        "
+    >
+        Generate Resume
+    </button>
+
+    <div
+        id="output"
+        style="
+            margin-top:20px;
+            padding:15px;
+            background:#f3f4f6;
+            border-radius:10px;
+            display:none;
+        "
+    ></div>
+
+</div>
+
+<script>
+async function generateResume() {
+
+    const name = document.getElementById("name").value;
+    const role = document.getElementById("role").value;
+    const skills = document.getElementById("skills").value;
+
+    const response = await fetch("http://localhost:8000/generate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name,
+            role,
+            skills
+        })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("output").style.display = "block";
+    document.getElementById("output").innerHTML =
+        `<h3>Generated Resume</h3>
+         <p>${data.response}</p>`;
+}
+</script>
+
+</body>
+</html>
